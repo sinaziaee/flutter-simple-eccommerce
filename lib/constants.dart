@@ -4,6 +4,13 @@ final kOutLineInputBorder = OutlineInputBorder(
   borderRadius: BorderRadius.circular(10),
 );
 
+final kTopOutlineInputBorder = OutlineInputBorder(
+  borderRadius: BorderRadius.only(
+    topRight: Radius.circular(10),
+    topLeft: Radius.circular(10),
+  ),
+);
+
 final kHeaderTextStyle = TextStyle(
   fontSize: 20,
   color: Colors.black,

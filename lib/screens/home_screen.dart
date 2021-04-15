@@ -1,3 +1,4 @@
+import 'package:ecommerce/screens/chat_screen.dart';
 import 'package:ecommerce/screens/login_screen.dart';
 import 'package:ecommerce/static_methods.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -27,13 +28,18 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ],
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.pushNamed(context, ChatScreen.id);
+        },
+        child: Icon(Icons.chat),
+      ),
     );
   }
 
-  logOut(){
+  logOut() {
     auth.signOut();
     StaticMethods.simplePopAndPushNavigation(
         context: context, routeName: LoginScreen.id);
   }
-
 }
