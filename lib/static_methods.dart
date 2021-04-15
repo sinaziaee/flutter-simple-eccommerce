@@ -16,7 +16,9 @@ class StaticMethods {
             style: kHeaderTextStyle.copyWith(),
           ),
           content: ElevatedButton(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.pop(context);
+            },
             child: Text('Ok'),
             style: ButtonStyle(
               backgroundColor: MaterialStateProperty.all(

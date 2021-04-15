@@ -16,3 +16,17 @@ final kCustomAppBarDecoration = BoxDecoration(
       bottomRight: Radius.circular(30)
   ),
 );
+
+final kCustomProgressIndicator = Container(
+  height: 80,
+  width: 80,
+  decoration: BoxDecoration(
+    borderRadius: BorderRadius.circular(10),
+    color: Colors.blueGrey,
+  ),
+  child: Center(
+    child: CircularProgressIndicator(
+      valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+    ),
+  ),
+);
