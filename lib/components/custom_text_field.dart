@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 class MyTextField extends StatelessWidget {
   final TextEditingController controller;
   final String text;
+
   MyTextField({this.controller, this.text});
 
   @override
