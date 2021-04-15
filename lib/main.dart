@@ -1,3 +1,4 @@
+import 'package:ecommerce/screens/chat_screen.dart';
 import 'package:ecommerce/screens/home_screen.dart';
 import 'package:ecommerce/screens/login_screen.dart';
 import 'package:ecommerce/screens/sign_up_screen.dart';
@@ -21,6 +22,7 @@ class MyApp extends StatelessWidget {
         HomeScreen.id: (context) => HomeScreen(),
         LoginScreen.id: (context) => LoginScreen(),
         SignUpScreen.id: (context) => SignUpScreen(),
+        ChatScreen.id: (context) => ChatScreen(),
       },
     );
   }
