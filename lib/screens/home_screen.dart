@@ -1,5 +1,7 @@
 import 'package:ecommerce/components/custom_item.dart';
+import 'package:ecommerce/components/custom_item_circular.dart';
 import 'package:ecommerce/components/custom_more_row.dart';
+import 'package:ecommerce/components/slide_show.dart';
 import 'package:ecommerce/models/item.dart';
 import 'package:ecommerce/screens/add_item_screen.dart';
 import 'package:ecommerce/screens/basket_screen.dart';
@@ -9,6 +11,7 @@ import 'package:ecommerce/screens/login_screen.dart';
 import 'package:ecommerce/screens/more_items_screen.dart';
 import 'package:ecommerce/static_methods.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
@@ -23,6 +26,8 @@ class _HomeScreenState extends State<HomeScreen> {
   FirebaseAuth auth = FirebaseAuth.instance;
   Map args;
   Size size;
+  DatabaseReference dbRef =
+      FirebaseDatabase.instance.reference().child('Items');
 
   @override
   void initState() {
@@ -73,45 +78,69 @@ class _HomeScreenState extends State<HomeScreen> {
             CustomMoreRow(
               text: 'Recommended for you',
               onMorePressed: () {
-                onMorePressed('recommended');
+                onMorePressed('Recommended');
               },
             ),
-            customListView(),
+            customListView('Recommended'),
             CustomMoreRow(
               text: 'Most Expensive',
               onMorePressed: () {
-                onMorePressed('expensive');
+                onMorePressed('Expensive');
               },
             ),
+            customListView('Expensive'),
           ],
         ),
       ),
     );
   }
 
-  Widget customListView() {
+  Widget customListView(String category) {
     return Container(
-      height: 150,
-      child: ListView(
-        scrollDirection: Axis.horizontal,
-        children: [
-          CustomItem(
-            onPressed: () {
-              onItemPressed(
-                Item(
-                  name: 'name',
-                  description: 'description',
-                  url: '',
-                  price: 50,
-                  id: '1',
-                ),
+      height: 160,
+      child: StreamBuilder(
+        stream: dbRef.orderByChild('category').equalTo(category).limitToFirst(6).onValue,
+        builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+          if (snapshot.hasData) {
+            Event event = snapshot.data;
+            DataSnapshot snap = event.snapshot;
+            Map map = snap.value;
+            List<Item> items = [];
+            for (Map each in map.values) {
+              Item item = Item(
+                id: each['id'],
+                name: each['name'],
+                description: each['description'],
+                url: each['url'],
+                price: each['price'],
+                category: each['category'],
               );
-            },
-            name: 'Lap top',
-            price: 50,
-            url: '',
-          ),
-        ],
+              items.add(item);
+            }
+            return ListView.builder(
+              itemCount: items.length,
+              scrollDirection: Axis.horizontal,
+              itemBuilder: (context, index) {
+                return CustomItem(
+                  onPressed: () {
+                    onItemPressed(
+                      items[index],
+                    );
+                  },
+                  item: items[index],
+                );
+              },
+            );
+          }
+          return ListView(
+            scrollDirection: Axis.horizontal,
+            children: [
+              for (int i = 0; i < 4; i++) ...[
+                CustomItemCircular(),
+              ],
+            ],
+          );
+        },
       ),
     );
   }
@@ -124,8 +153,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget customBanner() {
     return Container(
-      color: Colors.grey,
+      // color: Colors.grey,
       height: size.height * 0.3,
+      child: SlideShow(),
     );
   }
 

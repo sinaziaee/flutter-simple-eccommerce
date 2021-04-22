@@ -1,13 +1,12 @@
 import 'package:ecommerce/constants.dart';
+import 'package:ecommerce/models/item.dart';
 import 'package:flutter/material.dart';
 
 class CustomItem extends StatelessWidget {
-  final String url;
   final Function onPressed;
-  final String name;
-  final int price;
+  final Item item;
 
-  CustomItem({this.price, this.name, this.url, this.onPressed});
+  CustomItem({this.onPressed, this.item});
 
   @override
   Widget build(BuildContext context) {
@@ -26,21 +25,24 @@ class CustomItem extends StatelessWidget {
                 ClipRRect(
                   borderRadius: BorderRadius.circular(10),
                   child: FadeInImage(
+                    width: 100,
+                    height: 100,
+                    fit: BoxFit.cover,
                     placeholder: AssetImage('assets/images/person.png'),
-                    image: (url != null && url.length != 0)
-                        ? NetworkImage(url)
+                    image: (item.url != null && item.url.length != 0)
+                        ? NetworkImage(item.url)
                         : AssetImage('assets/images/person.png'),
                   ),
                 ),
                 Text(
-                  name,
+                  item.name,
                   style: kHeaderTextStyle.copyWith(
                     color: Colors.black,
                     fontSize: 16,
                   ),
                 ),
                 Text(
-                  price.toString(),
+                  '${item.price.toString()} \$',
                   style: kHeaderTextStyle.copyWith(
                     color: Colors.grey[700],
                     fontSize: 14,

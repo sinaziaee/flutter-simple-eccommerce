@@ -170,7 +170,7 @@ class StaticMethods {
     }
     if(canBeAddedToTheList == true){
       BucketList.items.add(item);
-      BucketList.itemsCount.add(0);
+      BucketList.itemsCount.add(1);
       return true;
     }
     else{

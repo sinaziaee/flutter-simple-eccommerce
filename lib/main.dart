@@ -4,6 +4,7 @@ import 'package:ecommerce/screens/chat_screen.dart';
 import 'package:ecommerce/screens/home_screen.dart';
 import 'package:ecommerce/screens/item_details_screen.dart';
 import 'package:ecommerce/screens/login_screen.dart';
+import 'package:ecommerce/screens/more_items_screen.dart';
 import 'package:ecommerce/screens/sign_up_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -30,6 +31,7 @@ class MyApp extends StatelessWidget {
         ChatScreen.id: (context) => ChatScreen(),
         BasketScreen.id: (context) => BasketScreen(),
         ItemDetailScreen.id: (context) => ItemDetailScreen(Item()),
+        MoreItemsScreen.id: (context) => MoreItemsScreen(),
         AddItemScreen.id: (context){
           return AddItemScreen();
         },

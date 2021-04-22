@@ -6,6 +6,7 @@ class Item {
   int price;
   String id;
   String url;
+  String category;
 
   Item({
     @required this.id,
@@ -13,6 +14,7 @@ class Item {
     this.description,
     this.price,
     this.url,
+    this.category,
   });
 }
 
