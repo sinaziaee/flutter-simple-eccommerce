@@ -1,3 +1,5 @@
+import 'package:ecommerce/screens/add_item_screen.dart';
+import 'package:ecommerce/screens/basket_screen.dart';
 import 'package:ecommerce/screens/chat_screen.dart';
 import 'package:ecommerce/screens/login_screen.dart';
 import 'package:ecommerce/static_methods.dart';
@@ -18,7 +20,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-
     args = ModalRoute.of(context).settings.arguments;
 
     return Scaffold(
@@ -31,7 +32,19 @@ class _HomeScreenState extends State<HomeScreen> {
               logOut();
             },
           ),
+          IconButton(
+            icon: Icon(Icons.add),
+            onPressed: () {
+              onAddPressed();
+            },
+          ),
         ],
+        leading: IconButton(
+          icon: Icon(Icons.shopping_basket),
+          onPressed: () {
+            onBasketPressed();
+          },
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
@@ -47,4 +60,13 @@ class _HomeScreenState extends State<HomeScreen> {
     StaticMethods.simplePopAndPushNavigation(
         context: context, routeName: LoginScreen.id);
   }
+
+  onBasketPressed(){
+    Navigator.pushNamed(context, BasketScreen.id);
+  }
+
+  onAddPressed(){
+    Navigator.pushNamed(context, AddItemScreen.id);
+  }
+
 }

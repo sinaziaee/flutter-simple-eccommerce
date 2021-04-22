@@ -175,7 +175,7 @@ class _LoginScreenState extends State<LoginScreen> {
       });
       showLoadingProgress = false;
       setState(() {});
-      Navigator.pushNamed(
+      Navigator.popAndPushNamed(
         context,
         HomeScreen.id,
         arguments: {

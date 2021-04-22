@@ -4,15 +4,21 @@ import 'package:flutter/material.dart';
 class MyTextField extends StatelessWidget {
   final TextEditingController controller;
   final String text;
+  final TextInputType inputType;
+  final int minLines;
+  final double height;
 
-  MyTextField({this.controller, this.text});
+  MyTextField({this.controller, this.text, this.inputType, this.minLines, this.height});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 40,
+      height: height ?? 40,
       child: TextFormField(
         cursorColor: Colors.black,
+        minLines: minLines ?? 1,
+        maxLines: 10,
+        keyboardType: inputType ?? TextInputType.text,
         controller: controller,
         decoration: InputDecoration(
           labelText: text,

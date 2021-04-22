@@ -1,5 +1,8 @@
+import 'package:ecommerce/screens/add_item_screen.dart';
+import 'package:ecommerce/screens/basket_screen.dart';
 import 'package:ecommerce/screens/chat_screen.dart';
 import 'package:ecommerce/screens/home_screen.dart';
+import 'package:ecommerce/screens/item_details_screen.dart';
 import 'package:ecommerce/screens/login_screen.dart';
 import 'package:ecommerce/screens/sign_up_screen.dart';
 import 'package:flutter/material.dart';
@@ -23,6 +26,11 @@ class MyApp extends StatelessWidget {
         LoginScreen.id: (context) => LoginScreen(),
         SignUpScreen.id: (context) => SignUpScreen(),
         ChatScreen.id: (context) => ChatScreen(),
+        BasketScreen.id: (context) => BasketScreen(),
+        ItemDetailScreen.id: (context) => ItemDetailScreen(),
+        AddItemScreen.id: (context){
+          return AddItemScreen();
+        },
       },
     );
   }

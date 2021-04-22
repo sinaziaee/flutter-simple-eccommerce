@@ -191,7 +191,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
       });
       showLoadingProgress = false;
       setState(() {});
-      Navigator.pushNamed(
+      Navigator.popAndPushNamed(
         context,
         HomeScreen.id,
         arguments: {
