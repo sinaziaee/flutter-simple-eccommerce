@@ -8,6 +8,8 @@ import 'package:ecommerce/screens/sign_up_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 
+import 'models/item.dart';
+
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
@@ -27,7 +29,7 @@ class MyApp extends StatelessWidget {
         SignUpScreen.id: (context) => SignUpScreen(),
         ChatScreen.id: (context) => ChatScreen(),
         BasketScreen.id: (context) => BasketScreen(),
-        ItemDetailScreen.id: (context) => ItemDetailScreen(),
+        ItemDetailScreen.id: (context) => ItemDetailScreen(Item()),
         AddItemScreen.id: (context){
           return AddItemScreen();
         },

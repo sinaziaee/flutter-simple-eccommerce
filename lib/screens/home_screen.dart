@@ -1,8 +1,10 @@
 import 'package:ecommerce/components/custom_item.dart';
 import 'package:ecommerce/components/custom_more_row.dart';
+import 'package:ecommerce/models/item.dart';
 import 'package:ecommerce/screens/add_item_screen.dart';
 import 'package:ecommerce/screens/basket_screen.dart';
 import 'package:ecommerce/screens/chat_screen.dart';
+import 'package:ecommerce/screens/item_details_screen.dart';
 import 'package:ecommerce/screens/login_screen.dart';
 import 'package:ecommerce/screens/more_items_screen.dart';
 import 'package:ecommerce/static_methods.dart';
@@ -19,9 +21,15 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   FirebaseAuth auth = FirebaseAuth.instance;
-
   Map args;
   Size size;
+
+  @override
+  void initState() {
+    BucketList.items = [];
+    BucketList.itemsCount = [];
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -64,14 +72,14 @@ class _HomeScreenState extends State<HomeScreen> {
             customBanner(),
             CustomMoreRow(
               text: 'Recommended for you',
-              onMorePressed: (){
+              onMorePressed: () {
                 onMorePressed('recommended');
               },
             ),
             customListView(),
             CustomMoreRow(
               text: 'Most Expensive',
-              onMorePressed: (){
+              onMorePressed: () {
                 onMorePressed('expensive');
               },
             ),
@@ -81,15 +89,23 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget customListView(){
+  Widget customListView() {
     return Container(
       height: 150,
       child: ListView(
         scrollDirection: Axis.horizontal,
         children: [
           CustomItem(
-            onPressed: (){
-              onItemPressed();
+            onPressed: () {
+              onItemPressed(
+                Item(
+                  name: 'name',
+                  description: 'description',
+                  url: '',
+                  price: 50,
+                  id: '1',
+                ),
+              );
             },
             name: 'Lap top',
             price: 50,
@@ -100,8 +116,10 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  onItemPressed(){
-
+  onItemPressed(Item item) {
+    Navigator.push(context, MaterialPageRoute(builder: (context) {
+      return ItemDetailScreen(item);
+    }));
   }
 
   Widget customBanner() {
