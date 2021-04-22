@@ -19,7 +19,7 @@ class _AddItemScreenState extends State<AddItemScreen> {
   bool showSpinner = false;
 
   File imageFile;
-
+  String category = 'Recommended';
   TextEditingController nameController, descriptionController, priceController;
 
   @override
@@ -85,6 +85,29 @@ class _AddItemScreenState extends State<AddItemScreen> {
                         controller: priceController,
                         text: 'Price of your app',
                         inputType: TextInputType.number,
+                      ),
+                      SizedBox(
+                        height: 60,
+                      ),
+                      Row(
+                        children: [
+                          Text('Category:     '),
+                          DropdownButton<String>(
+                            value: category,
+                            items: <String>['Recommended', 'Expensive'].map((String value) {
+                              return new DropdownMenuItem<String>(
+                                value: value,
+                                child: new Text(value),
+                              );
+                            }).toList(),
+                            onChanged: (val) {
+                              category = val;
+                              setState(() {
+
+                              });
+                            },
+                          )
+                        ],
                       ),
                     ],
                   ),
