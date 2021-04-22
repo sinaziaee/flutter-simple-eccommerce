@@ -4,6 +4,7 @@ import 'package:ecommerce/constants.dart';
 import 'package:ecommerce/screens/home_screen.dart';
 import 'package:ecommerce/screens/sign_up_screen.dart';
 import 'package:ecommerce/static_methods.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -22,6 +23,9 @@ class _LoginScreenState extends State<LoginScreen> {
   Size size;
   FocusNode node;
 
+  DatabaseReference dbRef =
+      FirebaseDatabase.instance.reference().child('Users');
+
   String email, password;
 
   bool showLoadingProgress = false;
@@ -29,8 +33,7 @@ class _LoginScreenState extends State<LoginScreen> {
   getUser() {
     User user = auth.currentUser;
     if (user != null) {
-      StaticMethods.simplePopAndPushNavigation(
-          context: context, routeName: HomeScreen.id);
+      getUserInfoFromDatabase(user);
     } else {
       // pass
     }
@@ -138,8 +141,7 @@ class _LoginScreenState extends State<LoginScreen> {
       setState(() {});
       if (userCredential != null) {
         print('user is: ${userCredential.user}');
-        StaticMethods.simplePopAndPushNavigation(
-            context: context, routeName: HomeScreen.id);
+        getUserInfoFromDatabase(userCredential.user);
       } else {
         print('user is null');
       }
@@ -155,6 +157,38 @@ class _LoginScreenState extends State<LoginScreen> {
       uploadInfo();
     } else {
       // pass
+    }
+  }
+
+  getUserInfoFromDatabase(User user) async {
+    showLoadingProgress = true;
+    setState(() {});
+    try {
+      String name;
+      String email;
+      String uid;
+      await dbRef.child(user.uid).once().then((value) {
+        print('---------------------------------------------');
+        name = value.value['name'];
+        email = value.value['email'];
+        uid = value.value['uid'];
+      });
+      showLoadingProgress = false;
+      setState(() {});
+      Navigator.pushNamed(
+        context,
+        HomeScreen.id,
+        arguments: {
+          'name': name,
+          'email': email,
+          'uid': uid,
+        },
+      );
+    } catch (e) {
+      showLoadingProgress = false;
+      setState(() {});
+      StaticMethods.showErrorDialog(context: context, text: 'sth went wrong');
+      print(e);
     }
   }
 }

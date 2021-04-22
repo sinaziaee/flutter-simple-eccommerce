@@ -7,7 +7,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
-
+import 'package:firebase_database/firebase_database.dart';
 import '../constants.dart';
 import '../static_methods.dart';
 
@@ -23,6 +23,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
       passwordController,
       nameController,
       rePasswordController;
+
+  DatabaseReference dbRef =
+      FirebaseDatabase.instance.reference().child('Users');
 
   Size size;
   FocusNode node;
@@ -158,12 +161,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
       UserCredential userCredential = await auth.createUserWithEmailAndPassword(
           email: email, password: password);
       print('after singing in');
-      showLoadingProgress = false;
-      setState(() {});
       if (userCredential != null) {
         print('user is: ${userCredential.user}');
-        StaticMethods.simplePopAndPushNavigation(
-            context: context, routeName: HomeScreen.id);
+        uploadToDatabase(userCredential.user, nameController.text);
       } else {
         print('user is null');
       }
@@ -179,6 +179,33 @@ class _SignUpScreenState extends State<SignUpScreen> {
       uploadInfo();
     } else {
       // pass
+    }
+  }
+
+  uploadToDatabase(User user, String name) async {
+    try{
+      await dbRef.child(user.uid).set({
+        'name': name,
+        'uid': user.uid,
+        'email': user.email,
+      });
+      showLoadingProgress = false;
+      setState(() {});
+      Navigator.pushNamed(
+        context,
+        HomeScreen.id,
+        arguments: {
+          'name': name,
+          'email': email,
+          'uid': user.uid,
+        },
+      );
+    }
+    catch(e){
+      showLoadingProgress = false;
+      setState(() {});
+      StaticMethods.showErrorDialog(context: context, text: 'sth went wrong');
+      print(e);
     }
   }
 }
