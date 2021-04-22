@@ -84,67 +84,72 @@ class _ChatScreenState extends State<ChatScreen> {
 
   Widget messageContainer(Map map) {
     bool isMe = auth.currentUser.email == map['sender'];
-    return Container(
-      margin: EdgeInsets.only(
-        top: 10,
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment:
-            isMe ? MainAxisAlignment.end : MainAxisAlignment.start,
-        children: [
-          Column(
-            crossAxisAlignment: isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
-            children: [
-              if(!isMe)...[
-                Padding(
-                  padding: EdgeInsets.only(left: 5, bottom: 5),
-                  child: Text(
-                    map['sender'],
-                    style: TextStyle(
-                      fontSize: 11
+    return InkWell(
+      onTap: (){
+        updateMessage(map);
+      },
+      child: Container(
+        margin: EdgeInsets.only(
+          top: 10,
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment:
+              isMe ? MainAxisAlignment.end : MainAxisAlignment.start,
+          children: [
+            Column(
+              crossAxisAlignment: isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+              children: [
+                if(!isMe)...[
+                  Padding(
+                    padding: EdgeInsets.only(left: 5, bottom: 5),
+                    child: Text(
+                      map['sender'],
+                      style: TextStyle(
+                        fontSize: 11
+                      ),
                     ),
+                  ),
+                ],
+                Container(
+                  margin: EdgeInsets.only(
+                    left: isMe ? 30 : 10,
+                    right: !isMe ? 30: 10,
+                  ),
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 10,
+                    vertical: 5,
+                  ),
+                  decoration: BoxDecoration(
+                    color: isMe ? Colors.lightBlue[100] : Colors.grey[300],
+                    borderRadius: BorderRadius.only(
+                      topLeft: isMe ? Radius.circular(20) : Radius.circular(5),
+                      bottomLeft: isMe ? Radius.circular(5) : Radius.circular(5),
+                      topRight: !isMe ? Radius.circular(20) : Radius.circular(5),
+                      bottomRight: !isMe ? Radius.circular(5) : Radius.circular(5),
+                    ),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        child: Text(
+                          map['messageBody'],
+                        ),
+                      ),
+                      Text(
+                        '${DateTime.parse(map['dateTime'].toDate().toString()).toString().substring(11,16)}',
+                        style: TextStyle(
+                            fontSize: 10
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ],
-              Container(
-                margin: EdgeInsets.only(
-                  left: isMe ? 30 : 10,
-                  right: !isMe ? 30: 10,
-                ),
-                padding: EdgeInsets.symmetric(
-                  horizontal: 10,
-                  vertical: 5,
-                ),
-                decoration: BoxDecoration(
-                  color: isMe ? Colors.lightBlue[100] : Colors.grey[300],
-                  borderRadius: BorderRadius.only(
-                    topLeft: isMe ? Radius.circular(20) : Radius.circular(5),
-                    bottomLeft: isMe ? Radius.circular(5) : Radius.circular(5),
-                    topRight: !isMe ? Radius.circular(20) : Radius.circular(5),
-                    bottomRight: !isMe ? Radius.circular(5) : Radius.circular(5),
-                  ),
-                ),
-                child: Column(
-                  crossAxisAlignment: isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      child: Text(
-                        map['messageBody'],
-                      ),
-                    ),
-                    Text(
-                      '${DateTime.parse(map['dateTime'].toDate().toString()).toString().substring(11,16)}',
-                      style: TextStyle(
-                          fontSize: 10
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ],
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -158,11 +163,32 @@ class _ChatScreenState extends State<ChatScreen> {
     uploadMessage(text);
   }
 
+  deleteMessage(Map map){
+    fireStore.collection('messages').doc(map['docRef']).delete();
+  }
+
+  updateMessage(Map map){
+    print(map);
+    map['messageBody'] = "newText";
+    fireStore.collection('messages').doc(map['docRef']).update(map);
+  }
+
   uploadMessage(String text) {
-    fireStore.collection('messages').add({
+    // fireStore.collection('messages').add({
+    //   'sender': auth.currentUser.email,
+    //   'messageBody': text,
+    //   'dateTime': DateTime.now(),
+    // });
+    DocumentReference docRef = fireStore.collection('messages').doc();
+    docRef.set({
       'sender': auth.currentUser.email,
       'messageBody': text,
       'dateTime': DateTime.now(),
+      'docRef': docRef.path.toString().split('/').last,
     });
+    // docRef.path      ->  /messages/alj231qasdf
+    // docRef       ->   sth like : instance Of DocumentRe...
+    // String str = docRef.id;
+    // String str2 = docRef.path.toString().split('/').last;
   }
 }
